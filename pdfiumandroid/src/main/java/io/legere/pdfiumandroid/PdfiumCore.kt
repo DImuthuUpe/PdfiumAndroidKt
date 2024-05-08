@@ -290,6 +290,40 @@ class PdfiumCore(context: Context? = null, val config: Config = Config()) {
     }
 
     @Deprecated(
+        "Use PdfTextPage.textPageGetCharBox(index)",
+        ReplaceWith(
+            "page.textPageGetCharBox(index)",
+        ),
+        DeprecationLevel.WARNING,
+    )
+    fun textPageGetCharBox(pdfDocument: PdfDocument,
+                                pageIndex: Int,
+                                index: Int): RectF? {
+        pdfDocument.openPage(pageIndex).use { page ->
+            page.openTextPage().use { textPage ->
+                return textPage.textPageGetCharBox(index);
+            }
+        }
+    }
+
+    @Deprecated(
+        "Use PdfTextPage.textPageGetLooseCharBox(index)",
+        ReplaceWith(
+            "page.textPageGetLooseCharBox(index)",
+        ),
+        DeprecationLevel.WARNING,
+    )
+    fun textPageGetLooseCharBox(pdfDocument: PdfDocument,
+                                pageIndex: Int,
+                                index: Int): RectF? {
+        pdfDocument.openPage(pageIndex).use { page ->
+            page.openTextPage().use { textPage ->
+                return textPage.textPageGetLooseCharBox(index);
+            }
+        }
+    }
+
+    @Deprecated(
         "Use PdfPage.textPageGetBoundedText(sourceRect, size)",
         ReplaceWith(
             "page.textPageGetBoundedText(sourceRect, size)",
