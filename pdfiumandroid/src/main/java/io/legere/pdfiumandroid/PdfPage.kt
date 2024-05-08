@@ -31,6 +31,9 @@ class PdfPage(
     private external fun nativeClosePage(pagePtr: Long)
     private external fun nativeClosePages(pagesPtr: LongArray)
     private external fun nativeGetPageWidthPixel(pagePtr: Long, dpi: Int): Int
+
+    private external fun  nativeGetPageWidth(pagePtr: Long): Float
+    private external fun  nativeGetPageHeight(pagePtr: Long): Float
     private external fun nativeGetPageHeightPixel(pagePtr: Long, dpi: Int): Int
     private external fun nativeGetPageWidthPoint(pagePtr: Long): Int
     private external fun nativeGetPageHeightPoint(pagePtr: Long): Int
@@ -111,6 +114,34 @@ class PdfPage(
      */
     @Suppress("DEPRECATION")
     fun openTextPage(): PdfTextPage = doc.openTextPage(this)
+
+    /**
+     * Get page width in pixels.
+     * @param screenDpi screen DPI (Dots Per Inch)
+     * @return page width in pixels
+     *  @throws IllegalStateException If the page or document is closed
+     */
+    fun getPageWidthF(): Float {
+        if (handleAlreadyClosed(isClosed || doc.isClosed)) return -1f
+
+        synchronized(PdfiumCore.lock) {
+            return nativeGetPageWidth(pagePtr)
+        }
+    }
+
+    /**
+     * Get page height in pixels.
+     * @param screenDpi screen DPI (Dots Per Inch)
+     * @return page height in pixels
+     *  @throws IllegalStateException If the page or document is closed
+     */
+    fun getPageHeightF(): Float {
+        if (handleAlreadyClosed(isClosed || doc.isClosed)) return -1f
+
+        synchronized(PdfiumCore.lock) {
+            return nativeGetPageHeight(pagePtr)
+        }
+    }
 
     /**
      * Get page width in pixels.

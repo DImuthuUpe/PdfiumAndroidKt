@@ -799,6 +799,50 @@ Java_io_legere_pdfiumandroid_PdfPage_nativeClosePages(JNIEnv *env, jobject thiz,
 }
 
 extern "C"
+JNIEXPORT jfloat JNICALL
+Java_io_legere_pdfiumandroid_PdfPage_nativeGetPageWidth(JNIEnv *env, jobject thiz,
+                                                             jlong page_ptr) {
+    try {
+        auto page = reinterpret_cast<FPDF_PAGE>(page_ptr);
+        return (jfloat) FPDF_GetPageWidthF(page);
+    } catch (std::bad_alloc &e) {
+        raise_java_oom_exception(env, e);
+    } catch (std::runtime_error &e) {
+        raise_java_runtime_exception(env, e);
+    } catch (std::invalid_argument &e) {
+        raise_java_invalid_arg_exception(env, e);
+    } catch (std::exception &e) {
+        raise_java_exception(env, e);
+    } catch (...) {
+        auto e =  std::runtime_error("Unknown error");
+        raise_java_exception(env, e);
+    }
+    return -1;
+}
+
+extern "C"
+JNIEXPORT jfloat JNICALL
+Java_io_legere_pdfiumandroid_PdfPage_nativeGetPageHeight(JNIEnv *env, jobject thiz,
+                                                        jlong page_ptr) {
+    try {
+        auto page = reinterpret_cast<FPDF_PAGE>(page_ptr);
+        return (jfloat) FPDF_GetPageHeightF(page);
+    } catch (std::bad_alloc &e) {
+        raise_java_oom_exception(env, e);
+    } catch (std::runtime_error &e) {
+        raise_java_runtime_exception(env, e);
+    } catch (std::invalid_argument &e) {
+        raise_java_invalid_arg_exception(env, e);
+    } catch (std::exception &e) {
+        raise_java_exception(env, e);
+    } catch (...) {
+        auto e =  std::runtime_error("Unknown error");
+        raise_java_exception(env, e);
+    }
+    return -1;
+}
+
+extern "C"
 JNIEXPORT jint JNICALL
 Java_io_legere_pdfiumandroid_PdfPage_nativeGetPageWidthPixel(JNIEnv *env, jobject thiz,
                                                              jlong page_ptr, jint dpi) {

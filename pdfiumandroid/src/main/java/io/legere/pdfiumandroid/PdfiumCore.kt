@@ -398,6 +398,39 @@ class PdfiumCore(context: Context? = null, val config: Config = Config()) {
         return (fromIndex.toLong()..toIndex.toLong()).toList().toTypedArray()
     }
 
+
+    @Deprecated(
+        "Use PdfPage.getPageWidthF()",
+        ReplaceWith(
+            "page.getPageWidthF()",
+        ),
+        DeprecationLevel.WARNING,
+    )
+    fun getPageWidthF(
+        pdfDocument: PdfDocument,
+        index: Int,
+    ): Float {
+        pdfDocument.openPage(index).use { page ->
+            return page.getPageWidthF()
+        }
+    }
+
+    @Deprecated(
+        "Use PdfPage.getPageHeightF()",
+        ReplaceWith(
+            "page.getPageHeightF()",
+        ),
+        DeprecationLevel.WARNING,
+    )
+    fun getPageHeightF(
+        pdfDocument: PdfDocument,
+        index: Int,
+    ): Float {
+        pdfDocument.openPage(index).use { page ->
+            return page.getPageHeightF()
+        }
+    }
+
     @Deprecated(
         "Use PdfPage.getPageWidth()",
         ReplaceWith(
