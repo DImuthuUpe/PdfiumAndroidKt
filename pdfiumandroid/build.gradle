@@ -47,13 +47,13 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    publishing {
+    /*publishing {
         singleVariant("release") {
             // if you don't want sources/javadoc, remove these lines
             withSourcesJar()
             withJavadocJar()
         }
-    }
+    }*/
 }
 
 dependencies {
@@ -96,6 +96,8 @@ def getRepositoryUsername() {
 def getRepositoryPassword() {
     return hasProperty('NEXUS_PASSWORD') ?  getProperty('NEXUS_PASSWORD') : ""
 }
+
+/*
 publishing {
     publications {
         release(MavenPublication) {
@@ -149,6 +151,7 @@ publishing {
 signing {
     sign publishing.publications.release
 }
+*/
 
 afterEvaluate {
     publishing {
