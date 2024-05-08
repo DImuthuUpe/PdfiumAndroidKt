@@ -1745,6 +1745,38 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextGetCharBox(JNIEnv *env, jobje
 }
 
 extern "C"
+JNIEXPORT jobject JNICALL
+Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextGetLooseCharBox(JNIEnv *env, jobject thiz,
+                                                              jlong text_page_ptr, jint index) {
+    try {
+        auto textPage = reinterpret_cast<FPDF_TEXTPAGE>(text_page_ptr);
+
+        FS_RECTF fsRectF;
+        FPDF_BOOL result = FPDFText_GetLooseCharBox(textPage, (int) index, &fsRectF);
+        if (!result) {
+            return nullptr;
+        }
+
+        jclass clazz = env->FindClass("android/graphics/RectF");
+        jmethodID constructorID = env->GetMethodID(clazz, "<init>", "(FFFF)V");
+        return env->NewObject(clazz, constructorID, fsRectF.left, fsRectF.top, fsRectF.right,
+                              fsRectF.bottom);
+    } catch (std::bad_alloc &e) {
+        raise_java_oom_exception(env, e);
+    } catch(std::runtime_error &e) {
+        raise_java_runtime_exception(env, e);
+    } catch(std::invalid_argument &e) {
+        raise_java_invalid_arg_exception(env, e);
+    } catch (std::exception &e) {
+        raise_java_exception(env, e);
+    } catch (...) {
+        auto e =  std::runtime_error("Unknown error");
+        raise_java_exception(env, e);
+    }
+    return nullptr;
+}
+
+extern "C"
 JNIEXPORT jint JNICALL
 Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextGetCharIndexAtPos(JNIEnv *env, jobject thiz,
                                                                      jlong text_page_ptr, jdouble x,

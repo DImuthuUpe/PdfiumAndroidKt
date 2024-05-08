@@ -44,6 +44,8 @@ class PdfTextPage(
 
     private external fun nativeTextGetUnicode(textPagePtr: Long, index: Int): Int
     private external fun nativeTextGetCharBox(textPagePtr: Long, index: Int): DoubleArray
+    private external fun nativeTextGetLooseCharBox(textPagePtr: Long, index: Int): RectF
+
     private external fun nativeTextGetCharIndexAtPos(
         textPagePtr: Long,
         x: Double,
@@ -189,6 +191,29 @@ class PdfTextPage(
                 r.bottom = o[2].toFloat()
                 r.top = o[3].toFloat()
                 return r
+            } catch (e: NullPointerException) {
+                Logger.e(TAG, e, "mContext may be null")
+            } catch (e: Exception) {
+                Logger.e(TAG, e, "Exception throw from native")
+            }
+        }
+        return null
+    }
+
+    /**
+     * Get the loose bounding box of a character on the page
+     * @param index the index of the character to get
+     * @return the bounding box
+     * @throws IllegalStateException if the page or document is closed
+     */
+    @Suppress("ReturnCount", "MagicNumber")
+    fun textPageGetLooseCharBox(index: Int): RectF? {
+        if (handleAlreadyClosed(isClosed || doc.isClosed)) return null
+        synchronized(PdfiumCore.lock) {
+            try {
+                val o =
+                    nativeTextGetLooseCharBox(pagePtr, index)
+                return o;
             } catch (e: NullPointerException) {
                 Logger.e(TAG, e, "mContext may be null")
             } catch (e: Exception) {
