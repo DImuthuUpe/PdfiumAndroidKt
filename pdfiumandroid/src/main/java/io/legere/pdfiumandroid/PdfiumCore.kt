@@ -367,6 +367,28 @@ class PdfiumCore(context: Context? = null, val config: Config = Config()) {
     }
 
     @Deprecated(
+        "Use PdfTextPage.textPageGetCharIndexAtPos(x, y, xTolerance, yTolerance)",
+        ReplaceWith(
+            "textPage.textPageGetCharIndexAtPos(x, y, xTolerance, yTolerance)",
+        ),
+        DeprecationLevel.WARNING,
+    )
+    fun textPageGetCharIndexAtPos(
+        pdfDocument: PdfDocument,
+        pageIndex: Int,
+        x: Double,
+        y: Double,
+        xTolerance: Double,
+        yTolerance: Double
+    ): Int {
+        pdfDocument.openPage(pageIndex).use { page ->
+            page.openTextPage().use { textPage ->
+                return textPage.textPageGetCharIndexAtPos(x, y, xTolerance, yTolerance)
+            }
+        }
+    }
+
+    @Deprecated(
         "Use PdfTextPage.textPageCountRects(startIndex, count)",
         ReplaceWith(
             "textPage.textPageCountRects(startIndex, count)",
