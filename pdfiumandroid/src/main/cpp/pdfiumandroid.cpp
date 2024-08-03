@@ -1841,15 +1841,15 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject t
     try {
 
         auto textPage = reinterpret_cast<FPDF_TEXTPAGE>(text_page_ptr);
-        const char *sq = env->GetStringUTFChars(search_query, nullptr);
+        //const char *sq = env->GetStringUTFChars(search_query, nullptr);
 
-        size_t len = strlen(sq);
-        unsigned short shortArray[len + 1]; // Extra space for the null terminator
-        charArrayToUTF16LE(sq, shortArray);
+        const wchar_t* search_text = L"the";
+        //size_t len = strlen(sq);
+        //unsigned short shortArray[len + 1]; // Extra space for the null terminator
+        //charArrayToUTF16LE(sq, shortArray);
 
         //FPDF_WIDESTRING pdfWideSearchString = jstring_to_FPDF_WIDESTRING(env, shortArray);
-
-        FPDF_SCHHANDLE searchHandle = FPDFText_FindStart(textPage, shortArray, 0, 0);
+        FPDF_SCHHANDLE searchHandle = FPDFText_FindStart(textPage, search_text, FPDF_MATCHCASE | FPDF_MATCHWHOLEWORD, 0);
 
         FPDF_BOOL found = FPDFText_FindNext(searchHandle);
 
