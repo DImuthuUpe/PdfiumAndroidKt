@@ -1839,6 +1839,7 @@ JNIEXPORT jint JNICALL
 Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject thiz,
                                                               jlong text_page_ptr, jstring search_query) {
     try {
+
         auto textPage = reinterpret_cast<FPDF_TEXTPAGE>(text_page_ptr);
         const char *sq = env->GetStringUTFChars(search_query, nullptr);
 
