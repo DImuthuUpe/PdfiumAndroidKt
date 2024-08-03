@@ -1820,26 +1820,18 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextGetLooseCharBox(JNIEnv *env, 
     return nullptr;
 }
 
-FPDF_WIDESTRING jstring_to_FPDF_WIDESTRING(JNIEnv *env, jstring javaString) {
-    // Get the length of the jstring
-    jsize length = (*env)->GetStringLength(env, javaString);
+void charArrayToUTF16LE(const char *charArray, unsigned short *shortArray) {
+    size_t len = strlen(charArray);
+    size_t wchar_len = mbstowcs(NULL, charArray, 0); // Get the required length for wide char array
 
-    // Allocate memory for the FPDF_WIDESTRING (UTF-16 units plus null terminator)
-    FPDF_WIDESTRING pdfWideString = (FPDF_WIDESTRING) malloc((length + 1) * sizeof(unsigned short));
+    wchar_t *wcharArray = (wchar_t *)malloc((wchar_len + 1) * sizeof(wchar_t));
+    mbstowcs(wcharArray, charArray, wchar_len + 1);
 
-    // Copy the jstring content to FPDF_WIDESTRING
-    const jchar *jcharString = (*env)->GetStringChars(env, javaString, NULL);
-    for (jsize i = 0; i < length; i++) {
-        pdfWideString[i] = jcharString[i];
+    for (size_t i = 0; i < wchar_len; ++i) {
+        shortArray[i] = (short)wcharArray[i];
     }
 
-    // Null terminate the FPDF_WIDESTRING
-    pdfWideString[length] = 0;
-
-    // Release the jstring chars
-    (*env)->ReleaseStringChars(env, javaString, jcharString);
-
-    return pdfWideString;
+    free(wcharArray);
 }
 
 extern "C"
@@ -1848,9 +1840,15 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject t
                                                               jlong text_page_ptr, jstring search_query) {
     try {
         auto textPage = reinterpret_cast<FPDF_TEXTPAGE>(text_page_ptr);
-        FPDF_WIDESTRING pdfWideSearchString = jstring_to_FPDF_WIDESTRING(env, search_query);
+        const char *sq = env->GetStringUTFChars(search_query, nullptr);
 
-        FPDF_SCHHANDLE searchHandle = FPDFText_FindStart(textPage, pdfWideSearchString, 0, 0);
+        size_t len = strlen(sq);
+        unsigned short shortArray[len + 1]; // Extra space for the null terminator
+        charArrayToUTF16LE(sq, shortArray);
+
+        //FPDF_WIDESTRING pdfWideSearchString = jstring_to_FPDF_WIDESTRING(env, shortArray);
+
+        FPDF_SCHHANDLE searchHandle = FPDFText_FindStart(textPage, shortArray, 0, 0);
 
         FPDF_BOOL found = FPDFText_FindNext(searchHandle);
 
@@ -1875,7 +1873,7 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject t
         auto e =  std::runtime_error("Unknown error");
         raise_java_exception(env, e);
     }
-    return nullptr;
+    return -1;
 }
 
 extern "C"
