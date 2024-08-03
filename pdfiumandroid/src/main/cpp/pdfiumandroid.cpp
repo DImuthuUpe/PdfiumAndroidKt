@@ -1855,6 +1855,8 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject t
         int resultIndex = -1;
         if (found) {
             resultIndex = FPDFText_GetSchResultIndex(searchHandle);
+        } else {
+            resultIndex = -2;
         }
 
         FPDFText_FindClose(searchHandle);
@@ -1873,7 +1875,7 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject t
         auto e =  std::runtime_error("Unknown error");
         raise_java_exception(env, e);
     }
-    return -1;
+    return -3;
 }
 
 extern "C"
