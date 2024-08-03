@@ -1853,7 +1853,8 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject t
         //charArrayToUTF16LE(sq, shortArray);
 
         //FPDF_WIDESTRING pdfWideSearchString = jstring_to_FPDF_WIDESTRING(env, shortArray);
-        FPDF_SCHHANDLE searchHandle = FPDFText_FindStart(textPage, (FPDF_WIDESTRING)L"the", FPDF_MATCHCASE | FPDF_MATCHWHOLEWORD, 0);
+        const unsigned short the[] = { 't', 'h', 'e', '\0' };
+        FPDF_SCHHANDLE searchHandle = FPDFText_FindStart(textPage, the, 0, 0);
 
         FPDF_BOOL found = FPDFText_FindNext(searchHandle);
 
