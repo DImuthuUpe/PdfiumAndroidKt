@@ -1839,17 +1839,21 @@ JNIEXPORT jint JNICALL
 Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject thiz,
                                                               jlong text_page_ptr, jstring search_query) {
     try {
+        //const char key_Contents[] = "Contents";
+
+        //FPDF_WIDESTRING contents_pdf_wide =
+        //reinterpret_cast<FPDF_WIDESTRING>(contents_wide.c_str());
 
         auto textPage = reinterpret_cast<FPDF_TEXTPAGE>(text_page_ptr);
         //const char *sq = env->GetStringUTFChars(search_query, nullptr);
 
-        const wchar_t* search_text = L"the";
+        //const wchar_t* search_text = L"the";
         //size_t len = strlen(sq);
         //unsigned short shortArray[len + 1]; // Extra space for the null terminator
         //charArrayToUTF16LE(sq, shortArray);
 
         //FPDF_WIDESTRING pdfWideSearchString = jstring_to_FPDF_WIDESTRING(env, shortArray);
-        FPDF_SCHHANDLE searchHandle = FPDFText_FindStart(textPage, search_text, FPDF_MATCHCASE | FPDF_MATCHWHOLEWORD, 0);
+        FPDF_SCHHANDLE searchHandle = FPDFText_FindStart(textPage, (FPDF_WIDESTRING)L"the", FPDF_MATCHCASE | FPDF_MATCHWHOLEWORD, 0);
 
         FPDF_BOOL found = FPDFText_FindNext(searchHandle);
 
