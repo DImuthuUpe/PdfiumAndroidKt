@@ -1820,6 +1820,64 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextGetLooseCharBox(JNIEnv *env, 
     return nullptr;
 }
 
+FPDF_WIDESTRING jstring_to_FPDF_WIDESTRING(JNIEnv *env, jstring javaString) {
+    // Get the length of the jstring
+    jsize length = (*env)->GetStringLength(env, javaString);
+
+    // Allocate memory for the FPDF_WIDESTRING (UTF-16 units plus null terminator)
+    FPDF_WIDESTRING pdfWideString = (FPDF_WIDESTRING) malloc((length + 1) * sizeof(unsigned short));
+
+    // Copy the jstring content to FPDF_WIDESTRING
+    const jchar *jcharString = (*env)->GetStringChars(env, javaString, NULL);
+    for (jsize i = 0; i < length; i++) {
+        pdfWideString[i] = jcharString[i];
+    }
+
+    // Null terminate the FPDF_WIDESTRING
+    pdfWideString[length] = 0;
+
+    // Release the jstring chars
+    (*env)->ReleaseStringChars(env, javaString, jcharString);
+
+    return pdfWideString;
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject thiz,
+                                                              jlong text_page_ptr, jstring search_query) {
+    try {
+        auto textPage = reinterpret_cast<FPDF_TEXTPAGE>(text_page_ptr);
+        FPDF_WIDESTRING pdfWideSearchString = jstring_to_FPDF_WIDESTRING(env, search_query);
+
+        FPDF_SCHHANDLE searchHandle = FPDFText_FindStart(textPage, pdfWideSearchString, 0, 0);
+
+        FPDF_BOOL found = FPDFText_FindNext(searchHandle);
+
+        int resultIndex = -1;
+        if (found) {
+            resultIndex = FPDFText_GetSchResultIndex(searchHandle);
+        }
+
+        FPDFText_FindClose(searchHandle);
+
+        return (jint)resultIndex;
+
+    } catch (std::bad_alloc &e) {
+        raise_java_oom_exception(env, e);
+    } catch(std::runtime_error &e) {
+        raise_java_runtime_exception(env, e);
+    } catch(std::invalid_argument &e) {
+        raise_java_invalid_arg_exception(env, e);
+    } catch (std::exception &e) {
+        raise_java_exception(env, e);
+    } catch (...) {
+        auto e =  std::runtime_error("Unknown error");
+        raise_java_exception(env, e);
+    }
+    return nullptr;
+}
+
 extern "C"
 JNIEXPORT jint JNICALL
 Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextGetCharIndexAtPos(JNIEnv *env, jobject thiz,
