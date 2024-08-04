@@ -1839,23 +1839,19 @@ JNIEXPORT jint JNICALL
 Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject thiz,
                                                               jlong text_page_ptr, jstring search_query) {
     try {
-        //const char key_Contents[] = "Contents";
-
-        //FPDF_WIDESTRING contents_pdf_wide =
-        //reinterpret_cast<FPDF_WIDESTRING>(contents_wide.c_str());
 
         auto textPage = reinterpret_cast<FPDF_TEXTPAGE>(text_page_ptr);
-        const char *chars = env->GetStringUTFChars(search_query, nullptr);
+        const jchar *chars = env->GetStringChars(search_query, nullptr);
 
         if (chars == nullptr) {
-            return -4; // Handle allocation failure appropriately
+            return -1;
         }
 
         jsize len = env->GetStringLength(search_query);
         FPDF_WCHAR* pdf_widestr = (FPDF_WCHAR*)malloc((len + 1) * sizeof(FPDF_WCHAR));
         if (pdf_widestr == nullptr) {
-            //env->ReleaseStringChars(search_query, chars);
-            return -5; // Handle memory allocation failure appropriately
+            env->ReleaseStringChars(search_query, chars);
+            return -1;
         }
 
         for (jsize i = 0; i < len; ++i) {
@@ -1863,13 +1859,7 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject t
         }
 
         pdf_widestr[len] = '\0';
-        //const wchar_t* search_text = L"the";
-        //size_t len = strlen(sq);
-        //unsigned short shortArray[len + 1]; // Extra space for the null terminator
-        //charArrayToUTF16LE(sq, shortArray);
 
-        //FPDF_WIDESTRING pdfWideSearchString = jstring_to_FPDF_WIDESTRING(env, shortArray);
-        //const unsigned short the[] = { 't', 'h', 'e', '\0' };
         FPDF_SCHHANDLE searchHandle = FPDFText_FindStart(textPage, pdf_widestr, 0, 0);
 
         FPDF_BOOL found = FPDFText_FindNext(searchHandle);
@@ -1878,10 +1868,11 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject t
         if (found) {
             resultIndex = FPDFText_GetSchResultIndex(searchHandle);
         } else {
-            resultIndex = -2;
+            resultIndex = -1;
         }
 
         FPDFText_FindClose(searchHandle);
+        free(pdf_widestr);
 
         return (jint)resultIndex;
 
@@ -1897,7 +1888,7 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject t
         auto e =  std::runtime_error("Unknown error");
         raise_java_exception(env, e);
     }
-    return -3;
+    return -1;
 }
 
 extern "C"
