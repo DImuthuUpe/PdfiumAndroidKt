@@ -45,7 +45,7 @@ class PdfTextPage(
     private external fun nativeTextGetUnicode(textPagePtr: Long, index: Int): Int
     private external fun nativeTextGetCharBox(textPagePtr: Long, index: Int): DoubleArray
     private external fun nativeTextGetLooseCharBox(textPagePtr: Long, index: Int): RectF
-    private external fun nativeTextSearch(textPagePtr: Long, searchQuery: String): Int
+    private external fun nativeTextSearch(textPagePtr: Long, searchQuery: String): IntArray
 
     private external fun nativeTextGetCharIndexAtPos(
         textPagePtr: Long,
@@ -225,8 +225,8 @@ class PdfTextPage(
     }
 
     @Suppress("ReturnCount", "MagicNumber")
-    fun textPageSearch(searchQuery: String): Int {
-        if (handleAlreadyClosed(isClosed || doc.isClosed)) return -1
+    fun textPageSearch(searchQuery: String): IntArray? {
+        if (handleAlreadyClosed(isClosed || doc.isClosed)) return null
         synchronized(PdfiumCore.lock) {
             try {
                 val o =
@@ -238,7 +238,7 @@ class PdfTextPage(
                 Logger.e(TAG, e, "Exception throw from native")
             }
         }
-        return -1
+        return null
     }
 
     /**

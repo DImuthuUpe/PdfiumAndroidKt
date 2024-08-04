@@ -1820,22 +1820,18 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextGetLooseCharBox(JNIEnv *env, 
     return nullptr;
 }
 
-void charArrayToUTF16LE(const char *charArray, unsigned short *shortArray) {
-    size_t len = strlen(charArray);
-    size_t wchar_len = mbstowcs(NULL, charArray, 0); // Get the required length for wide char array
+/*
+std::vector<jlong> links;
+        FPDF_LINK link;
+        while (FPDFLink_Enumerate(page, &pos, &link)) {
+            links.push_back(reinterpret_cast<jlong>(link));
+        }
 
-    wchar_t *wcharArray = (wchar_t *)malloc((wchar_len + 1) * sizeof(wchar_t));
-    mbstowcs(wcharArray, charArray, wchar_len + 1);
-
-    for (size_t i = 0; i < wchar_len; ++i) {
-        shortArray[i] = (short)wcharArray[i];
-    }
-
-    free(wcharArray);
-}
-
+        jlongArray result = env->NewLongArray(links.size());
+        env->SetLongArrayRegion(result, 0, links.size(), &links[0]);
+*/
 extern "C"
-JNIEXPORT jint JNICALL
+JNIEXPORT jintArray JNICALL
 Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject thiz,
                                                               jlong text_page_ptr, jstring search_query) {
     try {
@@ -1844,14 +1840,14 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject t
         const jchar *chars = env->GetStringChars(search_query, nullptr);
 
         if (chars == nullptr) {
-            return -1;
+            return env->NewIntArray(0);
         }
 
         jsize len = env->GetStringLength(search_query);
         FPDF_WCHAR* pdf_widestr = (FPDF_WCHAR*)malloc((len + 1) * sizeof(FPDF_WCHAR));
         if (pdf_widestr == nullptr) {
             env->ReleaseStringChars(search_query, chars);
-            return -1;
+            return env->NewIntArray(0);
         }
 
         for (jsize i = 0; i < len; ++i) {
@@ -1861,20 +1857,21 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject t
         pdf_widestr[len] = '\0';
 
         FPDF_SCHHANDLE searchHandle = FPDFText_FindStart(textPage, pdf_widestr, 0, 0);
+        std::vector<int> indexes;
 
-        FPDF_BOOL found = FPDFText_FindNext(searchHandle);
 
-        int resultIndex = -1;
-        if (found) {
-            resultIndex = FPDFText_GetSchResultIndex(searchHandle);
-        } else {
-            resultIndex = -1;
+        while (FPDFText_FindNext(searchHandle)) {
+            int index = FPDFText_GetSchResultIndex(searchHandle);
+            indexes.push_back(index);
         }
 
         FPDFText_FindClose(searchHandle);
         free(pdf_widestr);
 
-        return (jint)resultIndex;
+        jintArray result = env->NewIntArray(indexes.size());
+        env->SetIntArrayRegion(result, 0, indexes.size(), &indexes[0]);
+
+        return result;
 
     } catch (std::bad_alloc &e) {
         raise_java_oom_exception(env, e);
@@ -1888,7 +1885,7 @@ Java_io_legere_pdfiumandroid_PdfTextPage_nativeTextSearch(JNIEnv *env, jobject t
         auto e =  std::runtime_error("Unknown error");
         raise_java_exception(env, e);
     }
-    return -1;
+    return env->NewIntArray(0);;
 }
 
 extern "C"
