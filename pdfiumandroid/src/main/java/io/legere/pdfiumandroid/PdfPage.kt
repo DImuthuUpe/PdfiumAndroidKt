@@ -122,7 +122,7 @@ class PdfPage(
      *  @throws IllegalStateException If the page or document is closed
      */
     fun getPageWidthF(): Float {
-        Logger.d(TAG, "Calling getPageWidthF. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageWidthF. Current thread ${Thread.currentThread().name}")
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return -1f
 
         synchronized(PdfiumCore.lock) {
@@ -137,7 +137,7 @@ class PdfPage(
      *  @throws IllegalStateException If the page or document is closed
      */
     fun getPageHeightF(): Float {
-        Logger.d(TAG, "Calling getPageHeightF. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageHeightF. Current thread ${Thread.currentThread().name}")
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return -1f
 
         synchronized(PdfiumCore.lock) {
@@ -152,7 +152,7 @@ class PdfPage(
      *  @throws IllegalStateException If the page or document is closed
      */
     fun getPageWidth(screenDpi: Int): Int {
-        Logger.d(TAG, "Calling getPageWidth. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageWidth. Current thread ${Thread.currentThread().name}")
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return -1
 
         synchronized(PdfiumCore.lock) {
@@ -167,7 +167,7 @@ class PdfPage(
      *  @throws IllegalStateException If the page or document is closed
      */
     fun getPageHeight(screenDpi: Int): Int {
-        Logger.d(TAG, "Calling getPageHeight. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageHeight. Current thread ${Thread.currentThread().name}")
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return -1
 
         synchronized(PdfiumCore.lock) {
@@ -181,7 +181,7 @@ class PdfPage(
      *  @throws IllegalStateException If the page or document is closed
      */
     fun getPageWidthPoint(): Int {
-        Logger.d(TAG, "Calling getPageWidthPoint. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageWidthPoint. Current thread ${Thread.currentThread().name}")
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return -1
         synchronized(PdfiumCore.lock) {
             return nativeGetPageWidthPoint(pagePtr)
@@ -194,7 +194,7 @@ class PdfPage(
      *  @throws IllegalStateException If the page or document is closed
      */
     fun getPageHeightPoint(): Int {
-        Logger.d(TAG, "Calling getPageHeightPoint. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageHeightPoint. Current thread ${Thread.currentThread().name}")
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return -1
         synchronized(PdfiumCore.lock) {
             return nativeGetPageHeightPoint(pagePtr)
@@ -207,7 +207,7 @@ class PdfPage(
      *  @throws IllegalStateException If the page or document is closed
      */
     fun getPageCropBox(): RectF {
-        Logger.d(TAG, "Calling getPageCropBox. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageCropBox. Current thread ${Thread.currentThread().name}")
         check(!isClosed && !doc.isClosed) { "Already closed" }
         synchronized(PdfiumCore.lock) {
             val o = nativeGetPageCropBox(pagePtr)
@@ -226,7 +226,7 @@ class PdfPage(
      *  @throws IllegalStateException If the page or document is closed
      */
     fun getPageMediaBox(): RectF {
-        Logger.d(TAG, "Calling getPageMediaBox. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageMediaBox. Current thread ${Thread.currentThread().name}")
         check(!isClosed && !doc.isClosed) { "Already closed" }
         synchronized(PdfiumCore.lock) {
             val o = nativeGetPageMediaBox(pagePtr)
@@ -245,7 +245,7 @@ class PdfPage(
      *  @throws IllegalStateException If the page or document is closed
      */
     fun getPageBleedBox(): RectF {
-        Logger.d(TAG, "Calling getPageBleedBox. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageBleedBox. Current thread ${Thread.currentThread().name}")
         check(!isClosed && !doc.isClosed) { "Already closed" }
         synchronized(PdfiumCore.lock) {
             val o = nativeGetPageBleedBox(pagePtr)
@@ -264,7 +264,7 @@ class PdfPage(
      *  @throws IllegalStateException If the page or document is closed
      */
     fun getPageTrimBox(): RectF {
-        Logger.d(TAG, "Calling getPageTrimBox. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageTrimBox. Current thread ${Thread.currentThread().name}")
         check(!isClosed && !doc.isClosed) { "Already closed" }
         synchronized(PdfiumCore.lock) {
             val o = nativeGetPageTrimBox(pagePtr)
@@ -283,7 +283,7 @@ class PdfPage(
      *  @throws IllegalStateException If the page or document is closed
      */
     fun getPageArtBox(): RectF {
-        Logger.d(TAG, "Calling getPageArtBox. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageArtBox. Current thread ${Thread.currentThread().name}")
         check(!isClosed && !doc.isClosed) { "Already closed" }
         synchronized(PdfiumCore.lock) {
             val o = nativeGetPageArtBox(pagePtr)
@@ -302,7 +302,7 @@ class PdfPage(
      *  @throws IllegalStateException If the page or document is closed
      */
     fun getPageBoundingBox(): RectF {
-        Logger.d(TAG, "Calling getPageBoundingBox. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageBoundingBox. Current thread ${Thread.currentThread().name}")
         check(!isClosed && !doc.isClosed) { "Already closed" }
         synchronized(PdfiumCore.lock) {
             val o = nativeGetPageBoundingBox(pagePtr)
@@ -321,7 +321,7 @@ class PdfPage(
      *  @throws IllegalStateException If the page or document is closed
      */
     fun getPageSize(screenDpi: Int): Size {
-        Logger.d(TAG, "Calling getPageSize. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageSize. Current thread ${Thread.currentThread().name}")
         check(!isClosed && !doc.isClosed) { "Already closed" }
         synchronized(PdfiumCore.lock) {
             return nativeGetPageSizeByIndex(
@@ -351,7 +351,7 @@ class PdfPage(
         drawSizeY: Int,
         renderAnnot: Boolean = false
     ) {
-        Logger.d(TAG, "Calling renderPage. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling renderPage. Current thread ${Thread.currentThread().name}")
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return
         synchronized(PdfiumCore.lock) {
             try {
@@ -401,9 +401,9 @@ class PdfPage(
         textMask: Boolean = false
     ) {
 
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling renderPageBitmap. Current thread ${Thread.currentThread().name}")
         Logger.d(TAG, "Page closed " + isClosed)
         Logger.d(TAG, "Doc closed " + doc.isClosed)
-        Logger.d(TAG, "Calling renderPageBitmap. Current thread ${Thread.currentThread().name}")
 
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return
         synchronized(PdfiumCore.lock) {
@@ -427,7 +427,7 @@ class PdfPage(
         renderAnnot: Boolean = false,
         textMask: Boolean = false
     ) {
-        Logger.d(TAG, "Calling renderPageBitmap 2. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling renderPageBitmap 2. Current thread ${Thread.currentThread().name}")
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return
         val matrixValues = FloatArray(THREE_BY_THREE)
         matrix.getValues(matrixValues)
@@ -450,7 +450,7 @@ class PdfPage(
 
     /** Get all links from given page  */
     fun getPageLinks(): List<PdfDocument.Link> {
-        Logger.d(TAG, "Calling getPageLinks. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling getPageLinks. Current thread ${Thread.currentThread().name}")
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return emptyList()
         synchronized(PdfiumCore.lock) {
             val links: MutableList<PdfDocument.Link> =
@@ -492,7 +492,7 @@ class PdfPage(
         pageX: Double,
         pageY: Double
     ): Point {
-        Logger.d(TAG, "Calling mapPageCoordsToDevice. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling mapPageCoordsToDevice. Current thread ${Thread.currentThread().name}")
         check(!isClosed && !doc.isClosed) { "Already closed" }
         return nativePageCoordsToDevice(pagePtr, startX, startY, sizeX, sizeY, rotate, pageX, pageY)
     }
@@ -521,7 +521,7 @@ class PdfPage(
         deviceX: Int,
         deviceY: Int
     ): PointF {
-        Logger.d(TAG, "Calling mapDeviceCoordsToPage. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling mapDeviceCoordsToPage. Current thread ${Thread.currentThread().name}")
         check(!isClosed && !doc.isClosed) { "Already closed" }
         return nativeDeviceCoordsToPage(
             pagePtr,
@@ -559,7 +559,7 @@ class PdfPage(
         rotate: Int,
         coords: RectF
     ): Rect {
-        Logger.d(TAG, "Calling mapRectToDevice. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling mapRectToDevice. Current thread ${Thread.currentThread().name}")
         check(!isClosed && !doc.isClosed) { "Already closed" }
         val leftTop = mapPageCoordsToDevice(
             startX,
@@ -608,7 +608,7 @@ class PdfPage(
         rotate: Int,
         coords: Rect
     ): RectF {
-        Logger.d(TAG, "Calling mapRectToPage. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling mapRectToPage. Current thread ${Thread.currentThread().name}")
         check(!isClosed && !doc.isClosed) { "Already closed" }
         val leftTop = mapDeviceCoordsToPage(
             startX,
@@ -635,7 +635,7 @@ class PdfPage(
      * Close the page and release all resources
      */
     override fun close() {
-        Logger.d(TAG, "Calling close. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "${System.identityHashCode(this)} Calling close. Current thread ${Thread.currentThread().name}")
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return
         synchronized(PdfiumCore.lock) {
             pageMap[pageIndex]?.let {
@@ -648,7 +648,7 @@ class PdfPage(
             pageMap.remove(pageIndex)
 
             isClosed = true
-            Logger.d(TAG, "Page is closing " + isClosed + " Current thread ${Thread.currentThread().name}")
+            Logger.d(TAG, "${System.identityHashCode(this)} Page is closing " + isClosed + " Current thread ${Thread.currentThread().name}")
             nativeClosePage(pagePtr)
         }
     }
