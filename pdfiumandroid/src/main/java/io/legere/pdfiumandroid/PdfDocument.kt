@@ -233,7 +233,7 @@ class PdfDocument(
      */
     override fun close() {
         if (handleAlreadyClosed(isClosed)) return
-        Logger.e(TAG, "PdfDocument.close")
+        Logger.d(TAG, "PdfDocument.close")
 
         synchronized(PdfiumCore.lock) {
             isClosed = true

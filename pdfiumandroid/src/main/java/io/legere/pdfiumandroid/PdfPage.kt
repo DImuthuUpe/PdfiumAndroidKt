@@ -387,8 +387,8 @@ class PdfPage(
         textMask: Boolean = false
     ) {
 
-        Logger.e(TAG, e, "Page closed " + isClosed)
-        Logger.e(TAG, e, "Doc closed " + doc.isClosed)
+        Logger.d(TAG, "Page closed " + isClosed)
+        Logger.d(TAG, "Doc closed " + doc.isClosed)
 
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return
         synchronized(PdfiumCore.lock) {
@@ -627,7 +627,7 @@ class PdfPage(
             pageMap.remove(pageIndex)
 
             isClosed = true
-            Logger.e(TAG, e, "Page is closing " + isClosed)
+            Logger.d(TAG, "Page is closing " + isClosed)
             nativeClosePage(pagePtr)
         }
     }
