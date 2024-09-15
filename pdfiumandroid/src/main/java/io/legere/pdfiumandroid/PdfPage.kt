@@ -636,6 +636,8 @@ class PdfPage(
      */
     override fun close() {
         Logger.d(TAG, "${System.identityHashCode(this)} Calling close. Current thread ${Thread.currentThread().name}")
+        Logger.d(TAG, "Page closed " + isClosed)
+        Logger.d(TAG, "Doc closed " + doc.isClosed)
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return
         synchronized(PdfiumCore.lock) {
             pageMap[pageIndex]?.let {
