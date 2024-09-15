@@ -386,6 +386,10 @@ class PdfPage(
         renderAnnot: Boolean = false,
         textMask: Boolean = false
     ) {
+
+        Logger.e(TAG, e, "Page closed " + isClosed)
+        Logger.e(TAG, e, "Doc closed " + doc.isClosed)
+
         if (handleAlreadyClosed(isClosed || doc.isClosed)) return
         synchronized(PdfiumCore.lock) {
             nativeRenderPageBitmap(
@@ -623,6 +627,7 @@ class PdfPage(
             pageMap.remove(pageIndex)
 
             isClosed = true
+            Logger.e(TAG, e, "Page is closing " + isClosed)
             nativeClosePage(pagePtr)
         }
     }

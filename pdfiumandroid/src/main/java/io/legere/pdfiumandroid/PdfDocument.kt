@@ -233,7 +233,8 @@ class PdfDocument(
      */
     override fun close() {
         if (handleAlreadyClosed(isClosed)) return
-        Logger.d(TAG, "PdfDocument.close")
+        Logger.e(TAG, "PdfDocument.close")
+
         synchronized(PdfiumCore.lock) {
             isClosed = true
             nativeCloseDocument(mNativeDocPtr)
