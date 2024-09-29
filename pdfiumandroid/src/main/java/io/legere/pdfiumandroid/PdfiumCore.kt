@@ -542,8 +542,12 @@ class PdfiumCore(context: Context? = null, val config: Config = Config()) {
         drawSizeY: Int,
         renderAnnot: Boolean = false,
     ) {
-        pdfDocument.openPage(pageIndex).use { page ->
-            page.renderPageBitmap(bitmap, startX, startY, drawSizeX, drawSizeY, renderAnnot)
+        try {
+            pdfDocument.openPage(pageIndex).use { page ->
+                page.renderPageBitmap(bitmap, startX, startY, drawSizeX, drawSizeY, renderAnnot)
+            }
+        } catch (e: IllegalStateException) {
+            Logger.e(TAG, e, "Failed to render page bitmap for page " + pageIndex)
         }
     }
 
